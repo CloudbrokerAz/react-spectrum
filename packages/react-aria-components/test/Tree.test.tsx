@@ -22,6 +22,9 @@ import {
 import {AriaTreeTests} from './AriaTree.test-util';
 import {Button} from '../src/Button';
 import {Checkbox, CheckboxButton, CheckboxField} from '../src/Checkbox';
+import {Dialog, DialogTrigger} from '../src/Dialog';
+import {Label} from '../src/Label';
+import {Modal} from '../src/Modal';
 import {Collection} from 'react-aria/Collection';
 import {composeStories} from '@storybook/react';
 // @ts-ignore
@@ -2923,6 +2926,52 @@ describe('Tree', () => {
       await user.keyboard(' ');
       expect(parentInput).toHaveValue(' ');
       expect(onSelectionChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('contexts', () => {
+    it('should not propagate the checkbox context from selection into other cells', async () => {
+      let tree = render(
+        <Tree aria-label="Test" selectionMode="multiple">
+          <TreeItem id="dialog" textValue="dialog">
+            <TreeItemContent>
+              <DialogTrigger>
+                <Button>Open</Button>
+                <Modal>
+                  <Dialog>
+                    <Checkbox>
+                      <Label>Agree</Label>
+                    </Checkbox>
+                  </Dialog>
+                </Modal>
+              </DialogTrigger>
+            </TreeItemContent>
+          </TreeItem>
+          <TreeItem id="dog" textValue="Dog">
+            <TreeItemContent>Dog</TreeItemContent>
+          </TreeItem>
+        </Tree>
+      );
+
+      await user.click(tree.getByRole('button'));
+      let checkbox = tree.getByRole('checkbox');
+      expect(checkbox).toBeInTheDocument();
+    });
+
+    it('should allow an unslotted checkbox in TreeItemContent', () => {
+      let tree = render(
+        <Tree aria-label="Test" selectionMode="multiple">
+          <TreeItem id="1" textValue="Item">
+            <TreeItemContent>
+              <span>Item</span>
+              <Checkbox>Form checkbox</Checkbox>
+            </TreeItemContent>
+          </TreeItem>
+        </Tree>
+      );
+
+      let checkbox = tree.getByRole('checkbox', {name: 'Form checkbox'});
+      expect(checkbox).toBeInTheDocument();
     });
   });
 });
