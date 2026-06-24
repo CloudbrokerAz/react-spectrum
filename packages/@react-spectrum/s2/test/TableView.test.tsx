@@ -194,6 +194,25 @@ describe('TableView', () => {
     expect(document.activeElement).toBe(cells[3]);
   });
 
+  it('should render empty state and column headers when no height is specified', async () => {
+    offsetHeight.mockImplementation(() => 0);
+
+    let {getByText, getAllByRole} = render(
+      <TableView aria-label="Files" selectionMode="none">
+        <TableHeader columns={columns}>{column => <Column>{column.name}</Column>}</TableHeader>
+        <TableBody items={[]} renderEmptyState={() => 'No items found'} />
+      </TableView>
+    );
+    await act(() => Promise.resolve());
+
+    expect(getByText('No items found')).toBeInTheDocument();
+    let headers = getAllByRole('columnheader');
+    expect(headers.length).toBeGreaterThan(0);
+    expect(headers[0]).toHaveTextContent('Foo');
+
+    offsetHeight.mockImplementation(() => 1000);
+  });
+
   it('should render empty state + nested collection without crashing', async () => {
     const tabItems = [
       {id: 'general', label: 'General'},

@@ -410,7 +410,8 @@ export class TableLayout<T, O extends TableLayoutProps = TableLayoutProps> exten
     // Make sure that the table body gets a height if empty or performing initial load
     let isEmptyOrLoading = collection?.size === 0;
     if (isEmptyOrLoading) {
-      y = this.virtualizer!.size.height;
+      let loaderSize = this.loaderHeight ?? 48;
+      y = Math.max(this.virtualizer!.size.height, startY + loaderSize);
     } else {
       y -= this.gap;
     }
