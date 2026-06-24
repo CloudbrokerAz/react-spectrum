@@ -1,0 +1,15 @@
+---
+description: React Spectrum house conventions enforced on component and package changes
+globs: packages/**/*.ts,packages/**/*.tsx
+alwaysApply: false
+---
+
+# React Spectrum house conventions
+
+When changing code under `packages/`:
+
+- Follow the patterns already used in the same package. Do not introduce a new abstraction for a single use.
+- Do not use `any`. Any change to a public type must stay backwards compatible.
+- Every behavior change must add or update a test.
+- Never mutate props, state, or shared collections. Copy before sorting or reordering (for example `[...items].sort(...)`), and return new objects rather than mutating inputs.
+- Match the repository's existing import ordering and formatting; do not reformat unrelated lines.

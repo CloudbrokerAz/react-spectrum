@@ -42,3 +42,14 @@ the docs sites, and validation means running the Jest test suite.
 - If `yarn start` fails with an export-not-found error after a prior `yarn build`, run
   `make clean_all && yarn` (build artifacts shadow source). A stale `.parcel-cache` can also cause
   odd errors — delete it.
+
+### Conventions
+
+When changing code under `packages/`:
+
+- Follow patterns already used in the same package; do not add a new abstraction for a single use.
+- Do not use `any`. Public type changes must stay backwards compatible.
+- Every behavior change must add or update a test.
+- Never mutate props, state, or shared collections. Copy before sorting or reordering
+  (`[...items].sort(...)`) and return new objects rather than mutating inputs.
+- Match existing import ordering and formatting; do not reformat unrelated lines.
