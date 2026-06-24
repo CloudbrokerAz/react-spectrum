@@ -378,11 +378,13 @@ export class S2TableLayout<T> extends TableLayout<T> {
     // If loading or empty, we'll want the body to be sticky and centered
     let isEmptyOrLoading = this.virtualizer?.collection.size === 0;
     if (isEmptyOrLoading) {
+      let minBodyHeight = this.loaderHeight ?? 60;
+      let height = Math.max(this.virtualizer!.size.height - 80, minBodyHeight);
       layoutInfo.rect = new Rect(
         40,
         40,
         this.virtualizer!.size.width - 80,
-        this.virtualizer!.size.height - 80
+        height
       );
       layoutInfo.isSticky = true;
     }
