@@ -22,12 +22,15 @@ import {
 import {AriaTreeTests} from './AriaTree.test-util';
 import {Button} from '../src/Button';
 import {Checkbox, CheckboxButton, CheckboxField} from '../src/Checkbox';
+import {Dialog, DialogTrigger} from '../src/Dialog';
 import {Collection} from 'react-aria/Collection';
 import {composeStories} from '@storybook/react';
 // @ts-ignore
 import {DataTransfer, DragEvent} from 'react-aria/test/dnd/mocks';
 import {DropIndicator, useDragAndDrop} from '../src/useDragAndDrop';
+import {Label} from '../src/Label';
 import {ListLayout} from 'react-stately/useVirtualizerState';
+import {Modal} from '../src/Modal';
 import React from 'react';
 import * as stories from '../stories/Tree.stories';
 import {Text} from '../src/Text';
@@ -663,6 +666,31 @@ describe('Tree', () => {
       expect(new Set(onSelectionChange.mock.calls[0][0])).toEqual(new Set(['projects-1']));
     }
   );
+
+  it('should not propagate the checkbox context from selection into other cells', async () => {
+    let tree = render(
+      <Tree aria-label="Test" selectionMode="multiple">
+        <TreeItem id="dialog" textValue="dialog">
+          <TreeItemContent>
+            <DialogTrigger>
+              <Button>Open</Button>
+              <Modal>
+                <Dialog>
+                  <Checkbox>
+                    <Label>Agree</Label>
+                  </Checkbox>
+                </Dialog>
+              </Modal>
+            </DialogTrigger>
+          </TreeItemContent>
+        </TreeItem>
+      </Tree>
+    );
+
+    await user.click(tree.getByRole('button'));
+    let checkbox = tree.getByRole('checkbox');
+    expect(checkbox).toBeInTheDocument();
+  });
 
   it('should not render checkboxes for selection with selectionBehavior=replace ', async () => {
     let {getByRole, getAllByRole} = render(
