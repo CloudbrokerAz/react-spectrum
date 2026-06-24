@@ -379,7 +379,7 @@ export class S2TableLayout<T> extends TableLayout<T> {
     let isEmptyOrLoading = this.virtualizer?.collection.size === 0;
     if (isEmptyOrLoading) {
       let loaderSize = this.loaderHeight ?? 60;
-      let bodyHeight = Math.max(this.virtualizer!.size.height - 80, loaderSize);
+      let bodyHeight = Math.min(this.virtualizer!.size.height - 80, loaderSize);
       layoutInfo.rect = new Rect(
         40,
         40,
