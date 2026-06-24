@@ -24,6 +24,9 @@ import {Button} from '../src/Button';
 import {Checkbox, CheckboxButton, CheckboxField} from '../src/Checkbox';
 import {Collection} from 'react-aria/Collection';
 import {composeStories} from '@storybook/react';
+import {Dialog, DialogTrigger} from '../src/Dialog';
+import {Label} from '../src/Label';
+import {Modal} from '../src/Modal';
 // @ts-ignore
 import {DataTransfer, DragEvent} from 'react-aria/test/dnd/mocks';
 import {DropIndicator, useDragAndDrop} from '../src/useDragAndDrop';
@@ -3129,4 +3132,37 @@ AriaTreeTests({
     allInteractionsDisabled: () =>
       render(<ControlledDynamicTree disabledKeys={['reports']} selectionMode="single" />)
   }
+});
+
+describe('contexts', () => {
+  it('should not propagate the checkbox context from selection into other content', async () => {
+    let user = userEvent.setup();
+    let tree = render(
+      <Tree
+        aria-label="Files"
+        selectionMode="multiple"
+        items={[{id: '1', textValue: 'Item'}]}>
+        {item => (
+          <TreeItem textValue={item.textValue}>
+            <TreeItemContent>
+              <Text>{item.textValue}</Text>
+              <DialogTrigger>
+                <Button>Open</Button>
+                <Modal>
+                  <Dialog>
+                    <Checkbox>
+                      <Label>Agree</Label>
+                    </Checkbox>
+                  </Dialog>
+                </Modal>
+              </DialogTrigger>
+            </TreeItemContent>
+          </TreeItem>
+        )}
+      </Tree>
+    );
+    await user.click(tree.getByRole('button', {name: 'Open'}));
+    let checkbox = tree.getByRole('checkbox', {name: 'Agree'});
+    expect(checkbox).toBeInTheDocument();
+  });
 });

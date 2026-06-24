@@ -1000,6 +1000,7 @@ export const TreeItem = /*#__PURE__*/ createBranchComponent(
                   CheckboxContext,
                   {
                     slots: {
+                      [DEFAULT_SLOT]: {},
                       selection: checkboxProps
                     }
                   }
@@ -1008,6 +1009,7 @@ export const TreeItem = /*#__PURE__*/ createBranchComponent(
                   CheckboxFieldContext,
                   {
                     slots: {
+                      [DEFAULT_SLOT]: {},
                       selection: checkboxProps
                     }
                   }
