@@ -1,0 +1,20 @@
+{
+  "name": "react-spectrum",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "yarn install",
+  "terminals": [
+    {
+      "name": "Storybook",
+      "command": "yarn start",
+      "ports": [9003]
+    },
+    {
+      "name": "S2 Storybook",
+      "command": "yarn start:s2",
+      "ports": [6006]
+    }
+  ]
+}

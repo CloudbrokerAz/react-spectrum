@@ -2,5 +2,10 @@
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
-  "typescript.experimental.useTsgo": true
+  "typescript.experimental.useTsgo": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "search.exclude": {
+    "**/.parcel-cache": true,
+    "**/dist": true
+  }
 }
