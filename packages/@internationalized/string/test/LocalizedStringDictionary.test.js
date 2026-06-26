@@ -51,5 +51,13 @@ describe('LocalizedStringDictionary', function () {
       const localizedStringDictionary = new LocalizedStringDictionary(messages, 'es-ES');
       expect(localizedStringDictionary.getStringForLocale('hello', 'ja-JP')).toBe('Hola');
     });
+
+    it('prefers language-script match over language-only match', function () {
+      const localizedStringDictionary = new LocalizedStringDictionary({
+        sr: {year: 'гггг'},
+        'sr-Latn': {year: 'gggg'}
+      });
+      expect(localizedStringDictionary.getStringForLocale('year', 'sr-Latn-RS')).toBe('gggg');
+    });
   });
 });

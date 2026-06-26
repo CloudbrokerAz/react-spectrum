@@ -108,12 +108,21 @@ function getStringsForLocale<K extends string, T extends LocalizedString>(
     return strings[locale];
   }
 
+  let language = getLanguage(locale);
+
+  // If there is no exact match, try a language + script match before falling back to the
+  // language alone. For example, sr-Latn-RS (Serbian in Latin script) should match sr-Latn
+  // rather than sr, which defaults to Cyrillic.
+  let script = getScript(locale);
+  if (script && strings[`${language}-${script}`]) {
+    return strings[`${language}-${script}`];
+  }
+
   // Attempt to find the closest match by language.
   // For example, if the locale is fr-CA (French Canadian), but there is only
   // an fr-FR (France) set of strings, use that.
   // This could be replaced with Intl.LocaleMatcher once it is supported.
   // https://github.com/tc39/proposal-intl-localematcher
-  let language = getLanguage(locale);
   if (strings[language]) {
     return strings[language];
   }
@@ -136,4 +145,14 @@ function getLanguage(locale: string) {
   }
 
   return locale.split('-')[0];
+}
+
+function getScript(locale: string): string | undefined {
+  // @ts-ignore
+  if (Intl.Locale) {
+    // @ts-ignore
+    return new Intl.Locale(locale).script;
+  }
+
+  return undefined;
 }
